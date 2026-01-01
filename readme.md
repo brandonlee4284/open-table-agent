@@ -1,4 +1,4 @@
-# OpenTable Reservation Bot
+# OpenTable Reservation Agent
 
 An agentic browser automation system that autonomously books restaurant reservations on OpenTable using a multi-agent architecture with LLM-powered planning.
 
@@ -9,6 +9,7 @@ This system demonstrates a modular agentic architecture for web automation. The 
 ### Architecture
 
 The system follows a continuous observe-plan-execute-verify loop:
+<img width="2068" height="692" alt="Screenshot 2025-12-31 at 5 37 31 PM" src="https://github.com/user-attachments/assets/348a60bb-dec9-401f-a488-283b862c7090" />
 
 
 ---
