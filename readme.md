@@ -4,7 +4,7 @@ An agentic browser automation system that autonomously books restaurant reservat
 
 ## Overview
 
-This system demonstrates a modular agentic architecture for web automation. The bot takes a natural language task (e.g., "Book me a table at Ruth's Chris for 7pm for 2 people") and autonomously navigates OpenTable's website to reach the booking review page—stopping just before final confirmation.
+This system demonstrates a modular agentic architecture for web automation. The system takes a natural language task (e.g., "Book me a table at Flemmings Steak House for 7pm for 2 people") and autonomously navigates OpenTable's website to reach the booking review page—stopping just before final confirmation.
 
 ### Architecture
 
@@ -165,7 +165,6 @@ If decision is `"stop"`:
 - Supports action types: `click`, `fill`, `select`, `navigate`, `scroll`, `wait`
 - Finds elements using multiple strategies: id, css, text, aria-label, role
 - Captures pre/post URLs and detects signals (url_changed, network_idle)
-- Takes screenshot after execution for debugging
 - Returns structured success/failure result
 
 **Expected Output:**
