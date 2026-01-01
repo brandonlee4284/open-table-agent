@@ -298,12 +298,12 @@ This will use the default task: *"Book me a reservation for Ruth's Chris Steak H
 
 ### What to Expect
 
-The bot will:
+The agent will:
 1. Open a browser window (non-headless by default)
 2. Navigate to OpenTable
 3. Loop through observe → plan → execute → verify cycles
 4. Print progress to console
-5. Save detailed logs to `bot_output/` directory
+5. Save detailed logs to `agent_output/` directory
 6. **Stop at the booking review page** (before clicking "Complete Reservation")
 7. Keep browser open for inspection
 
