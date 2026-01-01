@@ -1,0 +1,20 @@
+# Core dependencies for the Observer module
+playwright==1.41.0
+
+# Gemini API for the Planner module
+google-generativeai==0.3.2
+
+# For logging and utilities
+python-dateutil==2.8.2
+
+# Optional: For enhanced JSON handling
+orjson==3.9.15
+
+# Optional: For async support (if you want to convert to async later)
+asyncio==3.4.3
+
+# Development dependencies (optional, uncomment if needed)
+# pytest==8.0.0
+# pytest-playwright==0.4.4
+# black==24.1.1
+# flake8==7.0.0

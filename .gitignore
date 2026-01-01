@@ -1,0 +1,8 @@
+.env
+.venv/
+__pycache__/
+plan.json
+page_state.json
+execution_result.json
+output/
+screenshot_after.png
