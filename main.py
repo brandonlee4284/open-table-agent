@@ -25,16 +25,30 @@ def main():
         print("Then run: export GEMINI_API_KEY='your-key-here'")
         sys.exit(1)
     
+    print("\n" + "="*70)
+    print("OpenTable Reservation Bot")
+    print("="*70)
+    print("\nExamples:")
+    print("  - Book me a table at Ruth's Chris for 7pm for 2 people")
+    print("  - Reserve a table at Fleming's Steakhouse at 8:30pm for 4")
+    print("  - Find a reservation at The Capital Grille tomorrow at 6pm")
+    print("="*70 + "\n")
+    
+    task = input("Enter your reservation request: ").strip()
+    
+    if not task:
+        print("\nError: Task cannot be empty")
+        sys.exit(1)
     # Get task from command line or use default
-    task = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else \
-           "Book me a reservation for Fleming's Steakhouse at 7pm for 2 people on January 2"
+    # task = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else \
+    #        "Book me a reservation for Fleming's Steakhouse at 7pm for 2 people on January 2"
     
     # Create output directory
     output_dir = Path("output")
     output_dir.mkdir(exist_ok=True)
     
     print(f"\n{'='*70}")
-    print(f"OpenTable Reservation Bot")
+    print(f"OpenTable Reservation Agent")
     print(f"{'='*70}")
     print(f"Task: {task}")
     print(f"Output: {output_dir}/")
