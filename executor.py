@@ -186,9 +186,46 @@ class Executor:
         # Wait for element to be visible and enabled
         element.wait_for(state="visible", timeout=5000)
         
-        # Select option
-        element.select_option(value)
-        logger.info(f"Selected option: {value}")
+        # Scroll into view
+        element.scroll_into_view_if_needed()
+        
+        # Try different selection strategies
+        try:
+            # Strategy 1: Select by value attribute
+            element.select_option(value=value)
+            logger.info(f"Selected option by value: {value}")
+        except Exception as e1:
+            logger.warning(f"Could not select by value, trying by label: {e1}")
+            try:
+                # Strategy 2: Select by visible text/label
+                # Extract time from the value (e.g., "2000-02-01T19:00:00" -> "7:00 PM")
+                if "T" in value:
+                    time_part = value.split("T")[1]  # "19:00:00"
+                    hour = int(time_part.split(":")[0])
+                    minute = int(time_part.split(":")[1])
+                    
+                    # Convert to 12-hour format
+                    period = "AM" if hour < 12 else "PM"
+                    display_hour = hour if hour <= 12 else hour - 12
+                    if display_hour == 0:
+                        display_hour = 12
+                    
+                    label = f"{display_hour}:{minute:02d} {period}"
+                    element.select_option(label=label)
+                    logger.info(f"Selected option by label: {label}")
+                else:
+                    raise Exception("Could not parse time value")
+            except Exception as e2:
+                logger.warning(f"Could not select by label, trying by index: {e2}")
+                # Strategy 3: Click the element and try to select
+                element.click()
+                time.sleep(0.5)
+                
+                # Try to find and click the option in the expanded dropdown
+                option_selector = f'option[value="{value}"]'
+                self.page.locator(option_selector).click()
+                logger.info(f"Selected option by clicking: {value}")
+    
     
     def _execute_navigate(self, action: Dict[str, Any]) -> None:
         """Execute a navigation action."""
@@ -228,6 +265,54 @@ class Executor:
         time.sleep(wait_time)
         logger.info(f"Waited for {wait_time} seconds")
     
+    # def _find_element(self, target: Dict[str, Any]):
+    #     """
+    #     Find an element based on the target strategy.
+        
+    #     Args:
+    #         target: Target dict with strategy and value
+        
+    #     Returns:
+    #         Playwright Locator or None
+    #     """
+    #     strategy = target.get("strategy", "")
+    #     value = target.get("value", "")
+        
+    #     try:
+    #         if strategy == "id":
+    #             return self.page.locator(f"#{value}")
+            
+    #         elif strategy == "css":
+    #             return self.page.locator(value)
+            
+    #         elif strategy == "text":
+    #             return self.page.get_by_text(value, exact=False)
+            
+    #         elif strategy == "aria":
+    #             return self.page.get_by_label(value)
+            
+    #         elif strategy == "role":
+    #             role = target.get("role", "button")
+    #             name = target.get("name")
+    #             if name:
+    #                 return self.page.get_by_role(role, name=name)
+    #             else:
+    #                 # Find by role and value as name
+    #                 return self.page.get_by_role(role, name=value)
+            
+    #         elif strategy == "eid":
+    #             # Custom element ID strategy - fallback to id
+    #             return self.page.locator(f"#{value}")
+            
+    #         else:
+    #             # Default fallback to CSS selector
+    #             logger.warning(f"Unknown strategy '{strategy}', trying as CSS selector")
+    #             return self.page.locator(value)
+                
+    #     except Exception as e:
+    #         logger.error(f"Error finding element with strategy {strategy}: {e}")
+    #         return None
+
     def _find_element(self, target: Dict[str, Any]):
         """
         Find an element based on the target strategy.
@@ -249,19 +334,35 @@ class Executor:
                 return self.page.locator(value)
             
             elif strategy == "text":
-                return self.page.get_by_text(value, exact=False)
+                locator = self.page.get_by_text(value, exact=False)
+                # If multiple elements found, use first one
+                if locator.count() > 1:
+                    logger.warning(f"Multiple elements found with text '{value}', using first one")
+                    return locator.first
+                return locator
             
             elif strategy == "aria":
-                return self.page.get_by_label(value)
+                locator = self.page.get_by_label(value)
+                # If multiple elements found, use first one
+                if locator.count() > 1:
+                    logger.warning(f"Multiple elements found with aria-label '{value}', using first one")
+                    return locator.first
+                return locator
             
             elif strategy == "role":
                 role = target.get("role", "button")
                 name = target.get("name")
                 if name:
-                    return self.page.get_by_role(role, name=name)
+                    locator = self.page.get_by_role(role, name=name)
                 else:
                     # Find by role and value as name
-                    return self.page.get_by_role(role, name=value)
+                    locator = self.page.get_by_role(role, name=value)
+                
+                # If multiple elements found, use first one
+                if locator.count() > 1:
+                    logger.warning(f"Multiple elements found with role '{role}', using first one")
+                    return locator.first
+                return locator
             
             elif strategy == "eid":
                 # Custom element ID strategy - fallback to id

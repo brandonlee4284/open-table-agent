@@ -27,7 +27,7 @@ def main():
     
     # Get task from command line or use default
     task = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else \
-           "Book me a reservation for Fleming's Steakhouse at 7pm for 2 people on Dec 31st"
+           "Book me a reservation for Fleming's Steakhouse at 7pm for 2 people on January 2"
     
     # Create output directory
     output_dir = Path("output")

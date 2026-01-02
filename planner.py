@@ -116,7 +116,9 @@ Important:
 * candidates must be 2–4 entries; no more, no fewer.
 * Always compute and include scores.total.
 * Never output null values. Omit optional objects/fields entirely if not used.
-* Only output valid JSON, no markdown formatting or code blocks."""
+* Only output valid JSON, no markdown formatting or code blocks.
+* Prioritize changing the date first (if necesary) before the time
+"""
 
     def __init__(self, api_key: Optional[str] = None, model_name: str = "gemini-flash-latest"):
         """
